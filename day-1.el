@@ -14,17 +14,18 @@
 
 (defun get-tuple-that-sums-to (target list)
   "find first two values in LIST that sum to 2020 or return nil"
-  (pcase list
-    (`() ())
-    (`(,head) ())
-    (`(,head . ,tail)
-     (-if-let (match-number (-find (-partial 'sum-2020? head) tail))
-       (list head match-number)
-       (get-tuple-that-sums-to target tail)))))
+  (let ((sums-to-2020? (-partial 'sum-to target)))
+    (pcase list
+      (`() ())
+      (`(,head) ())
+      (`(,head . ,tail)
+       (-if-let (match (--find (funcall sums-to-2020? head it) tail))
+	   (list head match)
+	 (get-tuple-that-sums-to target tail))))))
 
-(defun sum-2020? (n1 n2)
+(defun sum-to (target n1 n2)
   "Do N1 and N2 sum to 2020."
-  (= 2020 (+ n1 n2)))
+  (= target (+ n1 n2)))
 
 (defun my-string-to-list (list)
   "Convert LIST of newline seperated numebrs into list."
