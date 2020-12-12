@@ -5,15 +5,14 @@
 ;;; Code:
 
 (require 'dash)
-(setq lexical-binding t)
 
 (defun day-1 (list)
-  (-> list
-      (my-string-to-list)
-      (get-tuple-that-sums-to-2020)
-      (get-product)))
+  (-some--> list
+      (my-string-to-list it)
+      (get-tuple-that-sums-to 2020 it)
+      (-reduce '* it)))
 
-(defun get-tuple-that-sums-to-2020 (list)
+(defun get-tuple-that-sums-to (target list)
   "find first two values in LIST that sum to 2020 or return nil"
   (pcase list
     (`() ())
@@ -21,15 +20,11 @@
     (`(,head . ,tail)
      (-if-let (match-number (-find (-partial 'sum-2020? head) tail))
        (list head match-number)
-       (get-tuple-that-sums-to-2020 tail)))))
+       (get-tuple-that-sums-to target tail)))))
 
 (defun sum-2020? (n1 n2)
   "Do N1 and N2 sum to 2020."
-  (message "testing %d %d" n1 n2) (= 2020 (+ n1 n2)))
-
-(defun get-product (list)
-  (when list 
-    (-reduce '* list)))
+  (= 2020 (+ n1 n2)))
 
 (defun my-string-to-list (list)
   "Convert LIST of newline seperated numebrs into list."
@@ -60,7 +55,7 @@
 3
 4"))))
 
-(day-1 (read-file "./inputs/day-1.txt"))
+(message "%s" (day-1 (read-file "./inputs/day-1.txt")))
 ;; 1005459
 
 ;;; day-1.el ends here
