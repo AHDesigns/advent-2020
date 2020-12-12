@@ -26,10 +26,9 @@
   (pcase list
     (`() ())
     (`(,h1) ())
-    (`(,h1 . (,h2 . ,tail)) (-if-let (match (get-tuple-that-sums-to target (cons h2 tail) h1))
+    (`(,h1 . ,tail) (-if-let (match (get-tuple-that-sums-to target tail h1))
 				(cons h1 match)
-			      (get-three-tuple-that-sums-to target (cons h2 tail))))
-    (`(,head . ,tail) ())))
+		      (get-three-tuple-that-sums-to target tail)))))
 
 (defun get-tuple-that-sums-to (target list &optional seed)
   "find first two values in LIST that sum to 2020 or return nil"
