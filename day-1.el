@@ -5,18 +5,19 @@
 ;;; Code:
 
 (require 'dash)
+(require 's)
+(load (s-replace (buffer-name) "utils" (buffer-file-name)))
 
 (defun day-1 (list)
   (-some--> list
-      (my-string-to-list it)
-      (get-tuple-that-sums-to 2020 it)
-      (-reduce '* it)))
+    (my-string-to-number-list it)
+    (get-tuple-that-sums-to 2020 it)
+    (-reduce '* it)))
 
 (defun day-1-part2 (list)
   (-some--> list
-    (my-string-to-list it)
+    (my-string-to-number-list it)
     (get-three-tuple-that-sums-to 2020 it)
-
     (-reduce '* it)))
 
 ;;;; helpers
@@ -44,16 +45,6 @@
 (defun sum-to (target n1 n2)
   "Do N1 and N2 sum to 2020."
   (= target (+ n1 n2)))
-
-(defun my-string-to-list (list)
-  "Convert LIST of newline seperated numebrs into list."
-  (mapcar 'string-to-number (split-string list "\n")))
-
-(defun read-file (file)
-  "Return FILE contents as string"
-  (with-temp-buffer
-    (insert-file-contents file)
-    (buffer-string)))
 
 ;;;; Tests;
 
@@ -97,9 +88,6 @@
 (message "%s" (day-1 (read-file "./inputs/day-1.txt")))
 ;; 1005459
 
-;; obviously need to work on why I need this :P
-(setq max-lisp-eval-depth 10000)
-(setq max-specpdl-size 10000)
 (message "%s" (day-1-part2 (read-file "./inputs/day-1.txt")))
 ;; 92643264
 
