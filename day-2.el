@@ -36,8 +36,7 @@
 	       (char (match-string 3 str))
 	       (password (match-string 4 str)))
 	   (let ((count  (count-occurences-of char password)))
-	     (and (<= count max-count)
-		  (>= count min-count)))))))
+	     (<= min-count count max-count))))))
 
 (defun valid-password-2? (str)
   (save-match-data
